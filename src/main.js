@@ -29,7 +29,7 @@ const filmsListContainer = films.querySelector('.films-list__container');
 
 for (let i = 0; i < FILM_COUNT_LIST; i++) {
   render(filmsListContainer, createFilmCards(), 'beforeend');
-};
+}
 
 render(filmsList, createShowMoreButton(), 'beforeend');
 
@@ -38,15 +38,15 @@ const filmsListExtraContainer = filmsListExtra.querySelector('.films-list__conta
 
 for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
   render(filmsListExtraContainer, createFilmCards(), 'beforeend');
-};
+}
 
 const filmsListExtraContainerLast = films.lastElementChild.querySelector('.films-list__container');  // чтот не могу додуматься, как без костылей тут сделать
 
 for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
   render(filmsListExtraContainerLast, createFilmCards(), 'beforeend');
-};
+}
 
 const body = document.querySelector('body');
 
-// render(body, createFilmDitels(), 'beforeend');
+render(body, createFilmDitels(), 'beforeend');
 //
