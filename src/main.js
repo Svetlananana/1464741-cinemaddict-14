@@ -4,7 +4,7 @@ import { createSortList } from './view/sort.js';
 import { createFilmBlock } from './view/films.js';
 import { createFilmCards } from './view/films-cards.js';
 import { createShowMoreButton } from './view/show-more-button';
-import { createFilmDitels } from './view/film-diteils';
+import { createFilmDetails } from './view/film-details';
 
 const FILM_COUNT_LIST = 5;
 const FILM_COUNT_EXTRA = 2;
@@ -20,7 +20,6 @@ render(headerElement, createProfileUser(), 'beforeend');
 
 render(mainElement, createMenuTemplate(), 'beforeend');
 render(mainElement, createSortList(), 'beforeend');
-
 render(mainElement, createFilmBlock(), 'beforeend');
 
 const films = mainElement.querySelector('.films');
@@ -33,20 +32,19 @@ for (let i = 0; i < FILM_COUNT_LIST; i++) {
 
 render(filmsList, createShowMoreButton(), 'beforeend');
 
-const filmsListExtra = films.querySelector('.films-list--extra');
-const filmsListExtraContainer = filmsListExtra.querySelector('.films-list__container');
+const filmsListExtra = films.querySelectorAll('.films-list--extra');
+const topRated = filmsListExtra[0].querySelector('.films-list__container');
+const mostCommented = filmsListExtra[1].querySelector('.films-list__container');
 
 for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
-  render(filmsListExtraContainer, createFilmCards(), 'beforeend');
+  render(topRated, createFilmCards(), 'beforeend');
 }
 
-const filmsListExtraContainerLast = films.lastElementChild.querySelector('.films-list__container');  // чтот не могу додуматься, как без костылей тут сделать
-
 for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
-  render(filmsListExtraContainerLast, createFilmCards(), 'beforeend');
+  render(mostCommented, createFilmCards(), 'beforeend');
 }
 
 const body = document.querySelector('body');
 
-render(body, createFilmDitels(), 'beforeend');
+render(body, createFilmDetails(), 'beforeend');
 //
