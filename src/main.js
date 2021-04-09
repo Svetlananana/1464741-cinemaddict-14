@@ -63,4 +63,4 @@ for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
 }
 
 const body = document.querySelector('body');
-// render(body, createFilmDetails(filmCards[0]), InsertPlace.BEFORE_END);
+render(body, createFilmDetails(filmCards[0]), InsertPlace.BEFORE_END);
