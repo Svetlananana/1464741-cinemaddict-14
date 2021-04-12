@@ -1,4 +1,7 @@
+import dayjs from 'dayjs';
 import { createFilmCommentTemplate } from '../view/comment.js';
+import { createGenresTemplate } from './film-geners';
+import { createNoFilmsMessageTemplate } from './film-controls';
 
 export const createFilmDetails = (film) => {
   const {
@@ -25,30 +28,6 @@ export const createFilmDetails = (film) => {
       favorite,
     },
   } = film;
-
-
-  const createGenresTemplate = (genres) => {
-    const genersSpan = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
-
-    return `<td class="film-details__term">${genres.length > 1 ? 'Genres' : 'Genre'}</td>
-         <td class="film-details__cell">
-         ${genersSpan}`;
-  };
-
-  const genersSpan = createGenresTemplate(genres);
-
-  const createFilmDetailsControls = (watchlist, alreadyWatched, favorite) => {
-    return `<input type="checkbox" ${watchlist ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
-    <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
-
-    <input type="checkbox" ${alreadyWatched ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watched" name="watched">
-    <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
-
-    <input type="checkbox" ${favorite ? 'checked' : ''} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-    <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
-  };
-
-  const filmDetailsControls = createFilmDetailsControls(watchlist, alreadyWatched, favorite);
 
   const commentList = film.comments.map((comment) => {
     return createFilmCommentTemplate(comment);
@@ -94,7 +73,7 @@ export const createFilmDetails = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date}</td>
+              <td class="film-details__cell">${dayjs(date).format('DD MMMM YYYY')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -105,7 +84,7 @@ export const createFilmDetails = (film) => {
               <td class="film-details__cell">${relaseCountry}</td>
             </tr>
             <tr class="film-details__row">
-            ${genersSpan}
+            ${createGenresTemplate(genres)}
             </tr>
           </table>
 
@@ -116,7 +95,7 @@ export const createFilmDetails = (film) => {
       </div>
 
       <section class="film-details__controls">
-       ${filmDetailsControls}
+       ${createNoFilmsMessageTemplate(watchlist, alreadyWatched, favorite)}
       </section>
     </div>
 
