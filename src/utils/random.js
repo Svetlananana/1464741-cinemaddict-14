@@ -1,4 +1,7 @@
 
+export const MIN_COUNT_ELEMENT = 1;
+export const MAX_COUNT_ELEMENT = 3;
+
 export const getRandomFloat = (min, max) => {
   return Math.random() * (max - min) + min;
 };
@@ -19,4 +22,8 @@ export const getRandomBoolean = () => Boolean(getRandomNumber(0, 1));
 
 export const getRandomArrayItem = (array) => {
   return array[getRandomNumber(0, array.length -1)];
+};
+
+export const getRandomArrayItems = (array) => {
+  return new Array(getRandomNumber(MIN_COUNT_ELEMENT, MAX_COUNT_ELEMENT)).fill().map(() => array[getRandomNumber(0, array.length - 1)]);
 };
