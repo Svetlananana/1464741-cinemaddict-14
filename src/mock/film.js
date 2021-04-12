@@ -1,12 +1,13 @@
-// import dayjs from 'dayjs';
-
 import { generateDate, genetateRunTime } from '../utils/time.js';
 
 import {
   getRandomNumber,
   getRandomFixedFloat,
   getRandomBoolean,
-  getRandomArrayItem
+  getRandomArrayItem,
+  getRandomArrayItems,
+  MIN_COUNT_ELEMENT,
+  MAX_COUNT_ELEMENT
 } from '../utils/random';
 
 import {
@@ -19,28 +20,30 @@ import {
   GENRES
 } from './data';
 
-import { generateComment } from './comments';
+import { generateComment } from './comments.js';
+
+const MAX_FILM_RATING = 10;
 
 export const generateFilmPoster = () => {
   return {
-    id: 0,
-    comments: new Array(getRandomNumber(1, 3)).fill().map(() => generateComment()),// generateComments(3).map(c => c.id), //[1, 2, 3, 4, 5],
+    id: getRandomNumber(0, 1000),
+    comments: new Array(getRandomNumber(MIN_COUNT_ELEMENT, MAX_COUNT_ELEMENT)).fill().map(() => generateComment()),
     filmInfo: {
       title: getRandomArrayItem(TITLES),
       alternativeTitle: getRandomArrayItem(TITLES),
-      totalRating: getRandomFixedFloat(0, 10),
+      totalRating: getRandomFixedFloat(0, MAX_FILM_RATING),
       poster: `./images/posters/${getRandomArrayItem(POSTERS)}`,
       ageRating: getRandomArrayItem(AGE_RATING),
       director: getRandomArrayItem(PEOPLE),
-      writers: new Array(getRandomNumber(1, 3)).fill().map(() => PEOPLE[getRandomNumber(0, PEOPLE.length - 1)]).join(', '),
-      actors: new Array(getRandomNumber(1, 3)).fill().map(() => PEOPLE[getRandomNumber(0, PEOPLE.length - 1)]).join(', '),
+      writers: getRandomArrayItems(PEOPLE).join(', '),
+      actors: getRandomArrayItems(PEOPLE).join(', '),
       release: {
         date: generateDate(0),
         relaseCountry: getRandomArrayItem(COUNTRIES),
       },
-      runtime: genetateRunTime(-5),
-      genres: new Array(getRandomNumber(1, 3)).fill().map(() => GENRES[getRandomNumber(0, GENRES.length - 1)]),
-      description: new Array(getRandomNumber(1, 5)).fill().map(() => DESCRIPTIONS[getRandomNumber(0, DESCRIPTIONS.length - 1)]).join('. '),
+      runtime: genetateRunTime(0),
+      genres: getRandomArrayItems(GENRES),
+      description: getRandomArrayItems(DESCRIPTIONS).join('. '),
     },
     userDetails: {
       watchlist: getRandomBoolean(),
