@@ -2,29 +2,21 @@ import { createProfileUser } from './view/profile-user.js';
 import { createMenuTemplate } from './view/menu.js';
 import { createSortList } from './view/sort.js';
 import { createFilmBlock } from './view/films.js';
-import { createFilmCards } from './view/films-cards.js';
-import { createShowMoreButton } from './view/show-more-button';
-import { createFilmDetails } from './view/film-details';
+import { createFilmCard } from './view/film-cards.js';
+import { createShowMoreButton } from './view/show-more-button.js';
+import { createFilmDetails } from './view/film-details.js';
+import { createNoFilmsMessageTemplate } from './view/no-film-massage.js';
+import { generateFilmPoster } from './mock/film.js';
+import { render, InsertPlace } from './utils/render';
 
-const FILM_COUNT_LIST = 5;
+const FILM_COUNT_LIST = 20;
 const FILM_COUNT_EXTRA = 2;
-
-const InsertPlace = {
-  BEFORE_END: 'beforeend',  //  сразу перед закрывающим тегом element (после последнего потомка)
-  AFTER_BEGIN: 'afterbegin', // сразу после открывающего тега  element (перед первым потомком)
-  BEFORE_BEGIN: 'beforebegin', // до самого element (до открывающего тега)
-  AFTER_END: 'afterend', // после element (после закрывающего тега)
-};
+const FILM_COUNT_STEP = 5;
 
 const headerElement = document.querySelector('.header');
 const mainElement = document.querySelector('.main');
 
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
 render(headerElement, createProfileUser(), InsertPlace.BEFORE_END);
-
 render(mainElement, createMenuTemplate(), InsertPlace.BEFORE_END);
 render(mainElement, createSortList(), InsertPlace.BEFORE_END);
 render(mainElement, createFilmBlock(), InsertPlace.BEFORE_END);
@@ -33,25 +25,47 @@ const films = mainElement.querySelector('.films');
 const filmsList = films.querySelector('.films-list');
 const filmsListContainer = films.querySelector('.films-list__container');
 
-for (let i = 0; i < FILM_COUNT_LIST; i++) {
-  render(filmsListContainer, createFilmCards(), InsertPlace.BEFORE_END);
-}
-
-render(filmsList, createShowMoreButton(), InsertPlace.BEFORE_END);
-
 const filmsListExtra = films.querySelectorAll('.films-list--extra');
 const topRated = filmsListExtra[0].querySelector('.films-list__container');
 const mostCommented = filmsListExtra[1].querySelector('.films-list__container');
 
-for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
-  render(topRated, createFilmCards(), InsertPlace.BEFORE_END);
+const filmCards = new Array(FILM_COUNT_LIST).fill().map(generateFilmPoster);
+
+if (filmCards.length === 0) {
+  render(mainElement, createNoFilmsMessageTemplate(), InsertPlace.AFTER_BEGIN);
+}
+
+for (let i = 0; i < Math.min(filmCards.length, FILM_COUNT_STEP); i++) {
+  render(filmsListContainer, createFilmCard(filmCards[i]), InsertPlace.BEFORE_END);
+}
+
+if (filmCards.length > FILM_COUNT_STEP) {
+  let renderCountStep = FILM_COUNT_STEP;
+  render(filmsList, createShowMoreButton(), InsertPlace.BEFORE_END);
+
+  const showMoreButton = films.querySelector('.films-list__show-more');
+
+  showMoreButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    filmCards.slice(renderCountStep, renderCountStep + FILM_COUNT_STEP)
+      .forEach((filmCards) => render(filmsListContainer, createFilmCard(filmCards), InsertPlace.BEFORE_END));
+
+    renderCountStep += FILM_COUNT_STEP;
+
+    if (renderCountStep >= filmCards.length) {
+      showMoreButton.remove();
+    }
+
+  });
 }
 
 for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
-  render(mostCommented, createFilmCards(), InsertPlace.BEFORE_END);
+  render(topRated, createFilmCard(filmCards[i]), InsertPlace.BEFORE_END);
+}
+for (let i = 0; i < FILM_COUNT_EXTRA; i++) {
+  render(mostCommented, createFilmCard(filmCards[i]), InsertPlace.BEFORE_END);
 }
 
 const body = document.querySelector('body');
-
-render(body, createFilmDetails(), 'beforeend');
-
+render(body, createFilmDetails(filmCards[0]), InsertPlace.BEFORE_END);
