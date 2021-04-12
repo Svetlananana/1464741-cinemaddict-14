@@ -1,6 +1,7 @@
+import dayjs from 'dayjs';
 import { PEOPLE, DESCRIPTIONS, EMOTIONS } from './data';
 import { getRandomArrayItem } from '../utils/random';
-import { generateDateComments } from '../utils/time.js';
+import { generateDate } from '../utils/time.js';
 
 let id = 0;
 
@@ -9,7 +10,7 @@ export const generateComment = () => {
     id: ++id,
     author: getRandomArrayItem(PEOPLE),
     text: getRandomArrayItem(DESCRIPTIONS),
-    date: generateDateComments(1),
+    date:  dayjs(generateDate(-1)).format('YYYY/DD/MM HH:mm'),
     emotion: `./images/emoji/${getRandomArrayItem(EMOTIONS)}`,
   };
 };
