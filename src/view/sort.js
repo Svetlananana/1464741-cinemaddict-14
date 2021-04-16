@@ -1,4 +1,6 @@
-export const createSortList = () => {
+import { createElement } from '../utils/render.js';
+
+export const createSortListTemplate = () => {
   return `<ul class="sort">
   <li>
   <a href="#" class="sort__button sort__button--active">Sort by default</a>
@@ -11,5 +13,27 @@ export const createSortList = () => {
   <li>
   <a href="#" class="sort__button">Sort by rating</a>
   </li>
-</ul>`;
+</ul>`.trim();
 };
+
+export default class SortList {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortListTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

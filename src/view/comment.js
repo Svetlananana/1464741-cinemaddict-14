@@ -1,3 +1,5 @@
+import { createElement } from '../utils/render.js';
+
 export const createFilmCommentTemplate = (comment) => {
   const {author, text, date, emotion} = comment;
 
@@ -13,5 +15,28 @@ export const createFilmCommentTemplate = (comment) => {
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>
-</li>`;
+</li>`.trim();
 };
+
+export default class FilmComment {
+  constructor(comment) {
+    this._element = null;
+    this._comment = comment;
+  }
+
+  getTemplate() {
+    return createFilmCommentTemplate(this._comment);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,6 +1,6 @@
 import { createElement } from '../utils/render.js';
 
-export const createFilmBlockTemplate = () => {
+const createFilmListTemplate = () => {
   return `<section class="films">
 
   <section class="films-list">
@@ -9,36 +9,16 @@ export const createFilmBlockTemplate = () => {
     <div class="films-list__container">
     </div>
 
-    </section>
-
-
-
-    <section class="films-list films-list--extra">
-      <h2 class="films-list__title">Top rated</h2>
-
-      <div class="films-list__container">
-      </div>
-    </section>
-
-
-
-    <section class="films-list films-list--extra">
-    <h2 class="films-list__title">Most commented</h2>
-
-    <div class="films-list__container">
-    </div>
-
-  </section>
-    </section>`;
+    </section>`.trim();
 };
 
-export default class FilmBlock {
+export default class FilmListAll {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmBlockTemplate();
+    return createFilmListTemplate();
   }
 
   getElement() {

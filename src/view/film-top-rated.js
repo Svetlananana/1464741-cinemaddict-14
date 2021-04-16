@@ -1,16 +1,21 @@
 import { createElement } from '../utils/render.js';
 
-const createShowMoreButtonTemlate = () => {
-  return '<button class="films-list__show-more">Show more</button>';
+const createTopRatedTemplate = () => {
+  return` <section class="films-list films-list--extra">
+  <h2 class="films-list__title">Top rated</h2>
+
+  <div class="films-list__container" id="top-rated-list">
+  </div>
+</section>`.trim();
 };
 
-export default class ShowMoreButton {
+export default class FilmTopRated {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemlate();
+    return createTopRatedTemplate();
   }
 
   getElement() {
