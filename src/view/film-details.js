@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
-import { createFilmCommentTemplate } from '../view/comment.js';
-import { createGenresTemplate } from './film-geners';
-import { createNoFilmsMessageTemplate } from './film-controls';
+import FilmComment from '../view/comment.js';
+import Genres from './film-geners';
+import FilmDetailsControls from './film-controls';
+import { createElement, BODY } from '../utils/render.js';
 
-export const createFilmDetails = (film) => {
+export const createFilmDetailsTemplate = (film) => {
   const {
     filmInfo: {
       title,
@@ -30,7 +31,7 @@ export const createFilmDetails = (film) => {
   } = film;
 
   const commentList = film.comments.map((comment) => {
-    return createFilmCommentTemplate(comment);
+    return new FilmComment(comment).getTemplate();
   }).join('');
 
   return `<section class="film-details">
@@ -84,7 +85,7 @@ export const createFilmDetails = (film) => {
               <td class="film-details__cell">${relaseCountry}</td>
             </tr>
             <tr class="film-details__row">
-            ${createGenresTemplate(genres)}
+            ${new Genres(genres).getTemplate()}
             </tr>
           </table>
 
@@ -95,7 +96,7 @@ export const createFilmDetails = (film) => {
       </div>
 
       <section class="film-details__controls">
-       ${createNoFilmsMessageTemplate(watchlist, alreadyWatched, favorite)}
+       ${new FilmDetailsControls(watchlist, alreadyWatched, favorite).getTemplate()}
       </section>
     </div>
 
@@ -139,6 +140,50 @@ export const createFilmDetails = (film) => {
       </section>
     </div>
   </form>
-</section>`;
+</section>`.trim();
 };
 
+export default class FilmDetails {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  setClosePopupHandler() {
+    // const removeElement = this.removeElement.bind(this);
+
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        // removeElement();
+        document.removeEventListener('keydown', onEscKeyDown);
+        this.removeElement.bind(this);
+      }
+    };
+
+    document.addEventListener('keydown', onEscKeyDown);
+
+    const closeBtn = this._element.querySelector('.film-details__close-btn');
+    closeBtn.addEventListener('click', () =>{
+      document.removeEventListener('keydown', onEscKeyDown);
+      this.removeElement.bind(this);
+    });
+  }
+  removeElement() {
+    BODY.classList.remove('hide-overflow');
+    this._element.remove();
+    this._element = null;
+  }
+}

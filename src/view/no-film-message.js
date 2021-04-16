@@ -1,16 +1,18 @@
 import { createElement } from '../utils/render.js';
 
-const createShowMoreButtonTemlate = () => {
-  return '<button class="films-list__show-more">Show more</button>';
+const  createNoFilmsMessageTemplate = () => {
+  return `<section class="films-list">
+<h2 class="films-list__title">There are no movies in our database</h2>
+</section>`.trim();
 };
 
-export default class ShowMoreButton {
+export default class NoFilmsMessage {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemlate();
+    return createNoFilmsMessageTemplate();
   }
 
   getElement() {
@@ -25,3 +27,5 @@ export default class ShowMoreButton {
     this._element = null;
   }
 }
+
+

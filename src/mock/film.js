@@ -1,4 +1,4 @@
-import { generateDate, genetateRunTime } from '../utils/time.js';
+import { generateDate, generateRunTime } from '../utils/time.js';
 
 import {
   getRandomNumber,
@@ -23,10 +23,11 @@ import {
 import { generateComment } from './comments.js';
 
 const MAX_FILM_RATING = 10;
+const MAX_ID = 1000;
 
 export const generateFilmPoster = () => {
   return {
-    id: getRandomNumber(0, 1000),
+    id: getRandomNumber(0, MAX_ID),
     comments: new Array(getRandomNumber(MIN_COUNT_ELEMENT, MAX_COUNT_ELEMENT)).fill().map(() => generateComment()),
     filmInfo: {
       title: getRandomArrayItem(TITLES),
@@ -41,7 +42,7 @@ export const generateFilmPoster = () => {
         date: generateDate(0),
         relaseCountry: getRandomArrayItem(COUNTRIES),
       },
-      runtime: genetateRunTime(0),
+      runtime: generateRunTime(0),
       genres: getRandomArrayItems(GENRES),
       description: getRandomArrayItems(DESCRIPTIONS).join('. '),
     },
