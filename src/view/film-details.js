@@ -3,6 +3,7 @@ import FilmComment from '../view/comment.js';
 import Genres from './film-geners';
 import FilmDetailsControls from './film-controls';
 import { createElement, BODY } from '../utils/render.js';
+import { DateFormat } from '../utils/time.js';
 
 export const createFilmDetailsTemplate = (film) => {
   const {
@@ -74,11 +75,11 @@ export const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${dayjs(date).format('DD MMMM YYYY')}</td>
+              <td class="film-details__cell">${dayjs(date).format(DateFormat.RELEASE_DATE)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${runtime}</td>
+              <td class="film-details__cell">${dayjs(runtime).format(DateFormat.TIME)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -140,13 +141,14 @@ export const createFilmDetailsTemplate = (film) => {
       </section>
     </div>
   </form>
-</section>`.trim();
+</section>`;
 };
 
 export default class FilmDetails {
   constructor(film) {
     this._element = null;
     this._film = film;
+    this._removeElement = this.removeElement.bind(this);
   }
 
   getTemplate() {
@@ -162,14 +164,12 @@ export default class FilmDetails {
   }
 
   setClosePopupHandler() {
-    // const removeElement = this.removeElement.bind(this);
 
     const onEscKeyDown = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        // removeElement();
+        this.removeElement();
         document.removeEventListener('keydown', onEscKeyDown);
-        this.removeElement.bind(this);
       }
     };
 
@@ -178,9 +178,10 @@ export default class FilmDetails {
     const closeBtn = this._element.querySelector('.film-details__close-btn');
     closeBtn.addEventListener('click', () =>{
       document.removeEventListener('keydown', onEscKeyDown);
-      this.removeElement.bind(this);
+      this.removeElement();
     });
   }
+
   removeElement() {
     BODY.classList.remove('hide-overflow');
     this._element.remove();
