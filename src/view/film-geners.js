@@ -5,7 +5,7 @@ const createGenresTemplate = (genres) => {
 
   return `<td class="film-details__term">${genres.length > 1 ? 'Genres' : 'Genre'}</td>
        <td class="film-details__cell">
-       ${genresSpan}`.trim();
+       ${genresSpan}`;
 };
 
 export default class Genres {

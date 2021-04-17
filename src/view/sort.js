@@ -13,7 +13,7 @@ export const createSortListTemplate = () => {
   <li>
   <a href="#" class="sort__button">Sort by rating</a>
   </li>
-</ul>`.trim();
+</ul>`;
 };
 
 export default class SortList {

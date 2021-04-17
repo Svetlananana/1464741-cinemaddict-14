@@ -9,7 +9,7 @@ const createFilmListTemplate = () => {
     <div class="films-list__container">
     </div>
 
-    </section>`.trim();
+    </section>`;
 };
 
 export default class FilmListAll {

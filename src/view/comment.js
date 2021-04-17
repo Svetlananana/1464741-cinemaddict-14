@@ -15,7 +15,7 @@ export const createFilmCommentTemplate = (comment) => {
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>
-</li>`.trim();
+</li>`;
 };
 
 export default class FilmComment {

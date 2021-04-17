@@ -24,8 +24,7 @@ export const render = (container, element, place) => {
 // 3. возвращаем этот DOM-элемент
 export const createElement = (template) => {
   const newElement = document.createElement('div'); // 1
-  newElement.innerHTML = template; // 2
+  newElement.innerHTML = template.trim(); // 2
 
   return newElement.firstChild; // 3
 };
-
