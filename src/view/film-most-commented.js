@@ -7,7 +7,7 @@ const createMostCommentedTemplate = () => {
   <div class="films-list__container" id="most-commented-list">
   </div>
 
-</section>`.trim();
+</section>`;
 };
 
 export default class FilmMostCommented {

@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import { InsertPlace, render, createElement, BODY } from '../utils/render.js';
-import FilmButtonCard from './film-button-card';
+import FilmButtonCard, {ButtonType} from './film-button-card';
 import FilmDetails from './film-details.js';
+import { DateFormat } from '../utils/time.js';
 
 const MAX_LENGTH_DESCRIPTION = 140;
 
@@ -34,8 +35,8 @@ export const createFilmCardTemlate = (film) => {
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${dayjs(date).format('YYYY')}</span>
-    <span class="film-card__duration">${runtime}</span>
+    <span class="film-card__year">${dayjs(date).format(DateFormat.RELEASE_YEAR)}</span>
+    <span class="film-card__duration">${dayjs(runtime).format(DateFormat.TIME)}</span>
     <span class="film-card__genre">${genres.join(' ')}</span>
   </p>
 
@@ -44,11 +45,11 @@ export const createFilmCardTemlate = (film) => {
 
   <a class="film-card__comments">${comments.length} comments</a>
   <div class="film-card__controls">
-  ${new FilmButtonCard('watchlist', watchlist, 'watchlist').getTemplate()}
-  ${new FilmButtonCard('alreadyWatched', alreadyWatched, 'alreadyWatched').getTemplate()}
-  ${new FilmButtonCard('favorite', favorite, 'favorite').getTemplate()}
+  ${new FilmButtonCard(ButtonType.WATCHLIST, watchlist).getTemplate()}
+  ${new FilmButtonCard(ButtonType.ALREADY_WATCHED, alreadyWatched).getTemplate()}
+  ${new FilmButtonCard(ButtonType.FAVORITE, favorite).getTemplate()}
   </div>
-</article>`.trim();
+</article>`;
 };
 
 export default class FilmCard {
@@ -84,7 +85,7 @@ export default class FilmCard {
         const filmDetailsPopup = new FilmDetails(this._film);
         BODY.classList.add('hide-overflow');
 
-        render(BODY, filmDetailsPopup(this._film).getElement(), InsertPlace.BEFORE_END);
+        render(BODY, filmDetailsPopup.getElement(), InsertPlace.BEFORE_END);
         filmDetailsPopup.setClosePopupHandler();
       });
     });

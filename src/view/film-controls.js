@@ -8,7 +8,7 @@ const createFilmDetailsControls = (watchlist, alreadyWatched, favorite) => {
   <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
   <input type="checkbox" ${favorite ? 'checked' : ''} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
-  <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`.trim();
+  <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
 export default class FilmDetailsControls {

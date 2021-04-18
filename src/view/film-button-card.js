@@ -1,33 +1,49 @@
 import { createElement } from '../utils/render.js';
 
-const createFIlmButtonCardTemplate = (type, attribute, title) => {
-  const TYPES_BUTTON = {
-    watchlist: 'add-to-watchlist',
-    alreadyWatched: 'mark-as-watched',
-    favorite: 'favorite',
-  };
+export const ButtonType = {
+  WATCHLIST: 'watchlist',
+  ALREADY_WATCHED: 'alreadyWatched',
+  FAVORITE: 'favorite',
+};
 
-  const TYPES_BUTTON_TITLE = {
-    watchlist: 'Add to watchlist',
-    alreadyWatched: 'Mark as watched',
-    favorite: 'Mark as favorite',
-  };
+export const BUTTON_CLASS = {
+  watchlist: 'add-to-watchlist',
+  alreadyWatched: 'mark-as-watched',
+  favorite: 'favorite',
+};
 
-  return `<button class="film-card__controls-item button
-  film-card__controls-item--${TYPES_BUTTON[type]} ${attribute ? 'film-card__controls-item--active' : ''}"
-  type="button">${TYPES_BUTTON_TITLE[title]}</button>`;
+const TYPES_BUTTON_TITLE = {
+  watchlist: 'Add to watchlist',
+  alreadyWatched: 'Mark as watched',
+  favorite: 'Mark as favorite',
+};
+
+const createFIlmButtonCardTemplate = (type, attribute) => {
+  const buttonTypeClass = `film-card__controls-item--${BUTTON_CLASS[type]}`;
+  const activeClass = attribute ? 'film-card__controls-item--active' : '';
+  const title = TYPES_BUTTON_TITLE[type];
+
+  return (
+    `
+      <button
+        class="button film-card__controls-item ${activeClass} ${buttonTypeClass}"
+        type="button"
+      >
+        ${title}
+      </button>
+    `
+  );
 };
 
 export default class FilmButtonCard {
-  constructor(type, attribute, title) {
+  constructor(type, attribute) {
     this._element = null;
     this._type = type;
     this._attribute = attribute;
-    this._title = title;
   }
 
   getTemplate() {
-    return createFIlmButtonCardTemplate(this._type, this._attribute, this._title);
+    return createFIlmButtonCardTemplate(this._type, this._attribute);
   }
 
   getElement() {

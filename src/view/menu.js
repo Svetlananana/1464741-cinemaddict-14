@@ -20,7 +20,7 @@ const createMenuTemplate = () => {
   </div>
 
   <a href="#stats" class="main-navigation__additional">Stats</a>
-</nav>`.trim();
+</nav>`;
 };
 
 export default class Menu {

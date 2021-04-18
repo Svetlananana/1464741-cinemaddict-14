@@ -7,7 +7,7 @@ const createProfileUserTemlate = (rating) => {
   return `<section class="header__profile profile">
   <p class="profile__rating">${rating <= 10 ? 'Novice' : rating <= 20 ? 'Fan' : 'Movie Buff'}</p>
   <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-</section>`.trim();
+</section>`;
 };
 
 export default class ProfileUser {

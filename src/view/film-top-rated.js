@@ -6,7 +6,7 @@ const createTopRatedTemplate = () => {
 
   <div class="films-list__container" id="top-rated-list">
   </div>
-</section>`.trim();
+</section>`;
 };
 
 export default class FilmTopRated {
