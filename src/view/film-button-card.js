@@ -1,4 +1,4 @@
-import { createElement } from '../utils/render.js';
+import Abstract from './abstract.js';
 
 export const ButtonType = {
   WATCHLIST: 'watchlist',
@@ -18,7 +18,7 @@ const TYPES_BUTTON_TITLE = {
   favorite: 'Mark as favorite',
 };
 
-const createFIlmButtonCardTemplate = (type, attribute) => {
+const createFilmButtonCardTemplate = (type, attribute) => {
   const buttonTypeClass = `film-card__controls-item--${BUTTON_CLASS[type]}`;
   const activeClass = attribute ? 'film-card__controls-item--active' : '';
   const title = TYPES_BUTTON_TITLE[type];
@@ -35,26 +35,14 @@ const createFIlmButtonCardTemplate = (type, attribute) => {
   );
 };
 
-export default class FilmButtonCard {
+export default class FilmButtonCard extends Abstract {
   constructor(type, attribute) {
-    this._element = null;
+    super();
     this._type = type;
     this._attribute = attribute;
   }
 
   getTemplate() {
-    return createFIlmButtonCardTemplate(this._type, this._attribute);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+    return createFilmButtonCardTemplate(this._type, this._attribute);
   }
 }

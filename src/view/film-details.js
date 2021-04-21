@@ -1,9 +1,9 @@
-import dayjs from 'dayjs';
 import FilmComment from '../view/comment.js';
-import Genres from './film-geners';
+import Genres from './film-genres';
 import FilmDetailsControls from './film-controls';
-import { createElement, BODY } from '../utils/render.js';
-import { DateFormat } from '../utils/time.js';
+import { BODY } from '../utils/render.js';
+import { DateFormat, formatDate } from '../utils/time.js';
+import Abstract from './abstract.js';
 
 export const createFilmDetailsTemplate = (film) => {
   const {
@@ -75,11 +75,11 @@ export const createFilmDetailsTemplate = (film) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${dayjs(date).format(DateFormat.RELEASE_DATE)}</td>
+              <td class="film-details__cell">${formatDate(date, DateFormat.RELEASE_DATE)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${dayjs(runtime).format(DateFormat.TIME)}</td>
+              <td class="film-details__cell">${formatDate(runtime, DateFormat.TIME)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -144,47 +144,69 @@ export const createFilmDetailsTemplate = (film) => {
 </section>`;
 };
 
-export default class FilmDetails {
+export default class FilmDetails extends Abstract {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
-    this._removeElement = this.removeElement.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmDetailsTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  setClosePopupHandler() {
+  setClickHandler(callback) {
+    this._callback.click = callback;
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        this.removeElement();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    document.addEventListener('keydown', onEscKeyDown);
-
-    const closeBtn = this._element.querySelector('.film-details__close-btn');
-    closeBtn.addEventListener('click', () =>{
-      document.removeEventListener('keydown', onEscKeyDown);
-      this.removeElement();
-    });
+    this.getElement()
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this._clickHandler);
   }
 
   removeElement() {
-    BODY.classList.remove('hide-overflow');
     this._element.remove();
-    this._element = null;
   }
 }
+
+// export default class FilmDetails extends Abstract {
+//   constructor(film) {
+//     super();
+//     this._film = film;
+//     this._removeElement = this.removeElement.bind(this);
+//   }
+
+//   getTemplate() {
+//     return createFilmDetailsTemplate(this._film);
+//   }
+
+//   setClosePopupHandler() {
+
+//     const onEscKeyDown = (evt) => {
+//       if (evt.key === 'Escape' || evt.key === 'Esc') {
+//         evt.preventDefault();
+//         this.removeElement();
+//         document.removeEventListener('keydown', onEscKeyDown);
+//       }
+//     };
+
+//     document.addEventListener('keydown', onEscKeyDown);
+
+//     const closeBtn = this._element.querySelector('.film-details__close-btn');
+
+//     closeBtn.addEventListener('click', () =>{
+//       document.removeEventListener('keydown', onEscKeyDown);
+//       this.removeElement();
+//     });
+
+//   }
+
+//   removeElement() {
+//     BODY.classList.remove('hide-overflow');
+//     this._element.remove();
+//   }
+// }

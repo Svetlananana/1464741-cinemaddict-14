@@ -1,28 +1,14 @@
-import { createElement } from '../utils/render.js';
+import Abstract from './abstract.js';
 
 const createFilmSectionTemplate = () => {
-  return `<section class="films">
+  return `
+  <section class="films">
     </section>`;
 };
 
-export default class FilmBlock {
-  constructor() {
-    this._element = null;
-  }
+export default class FilmBlock extends Abstract {
 
   getTemplate() {
     return createFilmSectionTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
