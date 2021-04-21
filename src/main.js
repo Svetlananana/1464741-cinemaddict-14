@@ -63,7 +63,7 @@ render(
   films,
   new FilmMostCommentedView().getElement(),
   InsertPlace.BEFORE_END,
-  );
+);
 
 const filmsList = films.querySelector('.films-list');
 const filmsListContainer = films.querySelector('.films-list__container');

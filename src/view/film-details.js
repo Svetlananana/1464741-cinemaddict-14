@@ -1,7 +1,6 @@
 import FilmComment from '../view/comment.js';
 import Genres from './film-genres';
 import FilmDetailsControls from './film-controls';
-import { BODY } from '../utils/render.js';
 import { DateFormat, formatDate } from '../utils/time.js';
 import Abstract from './abstract.js';
 

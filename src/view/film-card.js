@@ -1,6 +1,5 @@
-import { InsertPlace, render, createElement, BODY } from '../utils/render.js';
+// import { InsertPlace, render, createElement, BODY } from '../utils/render.js';
 import FilmButtonCard, {ButtonType} from './film-button-card';
-import FilmDetails from './film-details.js';
 import { DateFormat, formatDate } from '../utils/time.js';
 import Abstract from './abstract.js';
 
