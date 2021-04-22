@@ -24,8 +24,7 @@ const createFilmButtonCardTemplate = (type, attribute) => {
   const title = TYPES_BUTTON_TITLE[type];
 
   return (
-    `
-      <button
+    ` <button
         class="button film-card__controls-item ${activeClass} ${buttonTypeClass}"
         type="button"
       >

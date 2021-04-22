@@ -30,7 +30,8 @@ export const createFilmCardTemlate = (film) => {
     return (text.length >= count) ? text.slice(0, count - 1) + '...' : text;
   };
 
-  return `<article class="film-card">
+  return `
+  <article class="film-card">
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
@@ -79,35 +80,3 @@ export default class FilmCard extends Abstract {
     });
   }
 }
-
-// export default class FilmCard extends Abstract {
-//   constructor(film) {
-//     super();
-//     this._film = film;
-//   }
-
-//   getTemplate() {
-//     return createFilmCardTemlate(this._film);
-//   }
-
-//   setOpenPopupHandler() {
-//     if (!this._element) {
-//       this._element = createElement(this.getTemplate());
-//     }
-
-//     const title = this._element.querySelector('.film-card__title');
-//     const poster = this._element.querySelector('.film-card__poster');
-//     const comments = this._element.querySelector('.film-card__comments');
-//     const cardsElements = [title, poster, comments];
-
-//     cardsElements.forEach((element) => {
-//       element.addEventListener('click', () => {
-//         const filmDetailsPopup = new FilmDetails(this._film);
-//         BODY.classList.add('hide-overflow');
-
-//         render(BODY, filmDetailsPopup.getElement(), InsertPlace.BEFORE_END);
-//         filmDetailsPopup.setClosePopupHandler();
-//       });
-//     });
-//   }
-// }
