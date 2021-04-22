@@ -75,12 +75,6 @@ const filmCards = new Array(FILM_COUNT_LIST).fill().map(generateFilm);
 const topRatedFilms = new Array(FILM_COUNT_EXTRA).fill().map(generateFilm);
 const mostCommentedFilms = new Array(FILM_COUNT_EXTRA).fill().map(generateFilm);
 
-// const createFilmCardWithHandlers = (film) => {
-//   const filmCard = new FilmCardView(film);
-//   filmCard.setOpenPopupHandler();
-//   return filmCard;
-// };
-
 const renderFilmCards = (filmContainer, filmCards) => {
 
   const filmElementCard = new FilmCardView(filmCards);
@@ -92,7 +86,7 @@ const renderFilmCards = (filmContainer, filmCards) => {
     bodyElement.classList.remove('hide-overflow');
   };
 
-  render(filmContainer, filmElementCard, InsertPlace.BEFORE_END);
+  render(filmContainer, filmElementCard.getElement(), InsertPlace.BEFORE_END);
 
   filmElementCard.setClickHandler(() => {
     const onEscKeyDown = (evt) => {
@@ -106,7 +100,7 @@ const renderFilmCards = (filmContainer, filmCards) => {
     bodyElement.classList.add('hide-overflow');
     document.addEventListener('keydown', onEscKeyDown);
 
-    render(bodyElement, filmDetailsCard, InsertPlace.BEFORE_END);
+    render(bodyElement, filmDetailsCard.getElement(), InsertPlace.BEFORE_END);
 
     filmDetailsCard.setClickHandler(() => {
       removeFilmDetailsCard();
@@ -114,9 +108,6 @@ const renderFilmCards = (filmContainer, filmCards) => {
     });
   });
 };
-
-// const renderFilmList = (mainElement, filmsElement) => {
-// const filmCard = new FilmCardView(filmsElement);
 
 if (!filmCards.length) {
   render(
@@ -128,7 +119,6 @@ if (!filmCards.length) {
 
 else {
   for (let i = 0; i < Math.min(filmCards.length, FILM_COUNT_STEP); i++) {
-    // render(filmsListContainer, new FilmCardView(filmCards[i]).getElement(), InsertPlace.BEFORE_END);
     renderFilmCards(filmsListContainer, filmCards[i]);
   }
 
@@ -139,24 +129,21 @@ else {
 
     render(
       filmsList,
-      showMoreButton,
+      showMoreButton.getElement(),
       InsertPlace.BEFORE_END,
     );
-
-    // const showMoreButton = films.querySelector('.films-list__show-more');
 
     showMoreButton.setClickHandler(() => {
 
       filmCards
         .slice(renderCountStep, renderCountStep + FILM_COUNT_STEP)
-        .forEach((film) => renderFilmCards(filmsListContainer, film)); // .forEach((film) => render(filmsListContainer, new FilmCardView(film).getElement(), InsertPlace.BEFORE_END));
+        .forEach((film) => renderFilmCards(filmsListContainer, film));
 
       renderCountStep += FILM_COUNT_STEP;
 
       if (renderCountStep >= filmCards.length) {
-        showMoreButton.removeElement();
+        showMoreButton.getElement().remove();
       }
-
     });
   }
 }
@@ -182,41 +169,3 @@ render(
   new StatisticsView().getElement(),
   InsertPlace.BEFORE_END,
 );
-
-
-// renderFilmList(mainElement, filmCards);
-
-// const renderFilmCards = (filmContainer, filmsElement) => {
-//   if (!filmsElement.length) {
-//     render(filmContainer, new NoFilmsMessageView().getElement(), InsertPlace.AFTER_BEGIN);
-//   }
-
-//   else {
-//     for (let i = 0; i < Math.min(filmsElement.length, FILM_COUNT_STEP); i++) {
-//       render(filmsListContainer, createFilmCardWithHandlers(filmsElement[i]).getElement(), InsertPlace.BEFORE_END);
-//     }
-//     if (filmsElement.length > FILM_COUNT_STEP) {
-//       let renderCountStep = FILM_COUNT_STEP;
-//       render(filmsList, new ShowMoreButtonView().getElement(), InsertPlace.BEFORE_END);
-
-//       const showMoreButton = films.querySelector('.films-list__show-more');
-
-//       showMoreButton.addEventListener('click', (evt) => {
-//         evt.preventDefault();
-
-//         filmsElement
-//           .slice(renderCountStep, renderCountStep + FILM_COUNT_STEP)
-//           .forEach((film) => render(filmsListContainer, createFilmCardWithHandlers(film).getElement(), InsertPlace.BEFORE_END));
-
-//         renderCountStep += FILM_COUNT_STEP;
-
-//         if (renderCountStep >= filmsElement.length) {
-//           showMoreButton.remove();
-//         }
-
-//       });
-//     }
-//   }
-// };
-
-// renderFilmCards(mainElement, filmCards);
