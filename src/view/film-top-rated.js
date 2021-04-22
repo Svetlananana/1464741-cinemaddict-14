@@ -1,7 +1,8 @@
-import { createElement } from '../utils/render.js';
+import Abstract from './abstract.js';
 
 const createTopRatedTemplate = () => {
-  return` <section class="films-list films-list--extra">
+  return `
+  <section class="films-list films-list--extra">
   <h2 class="films-list__title">Top rated</h2>
 
   <div class="films-list__container" id="top-rated-list">
@@ -9,24 +10,9 @@ const createTopRatedTemplate = () => {
 </section>`;
 };
 
-export default class FilmTopRated {
-  constructor() {
-    this._element = null;
-  }
+export default class FilmTopRated extends Abstract {
 
   getTemplate() {
     return createTopRatedTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
