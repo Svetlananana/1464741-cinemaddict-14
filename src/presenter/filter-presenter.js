@@ -1,5 +1,14 @@
-import { render, InsertPlace, remove, replace } from '../utils/render.js';
-import SortListView from '../view/sort.js'
+// import { render, InsertPlace, remove, replace } from '../utils/render.js';
+import SortListView from '../view/sort.js';
+import dayjs from 'dayjs';
+
+const sortFilmsByDate = (filmA, filmB) => {
+  return dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
+};
+
+const sortFilmsByRating = (filmA, filmB) => {
+  return filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
+};
 
 export const FILTER = {
   ALL_MOVIES: 'All movies',
@@ -9,23 +18,26 @@ export const FILTER = {
   STATS: 'Stats',
 };
 
-export default FilterPresenter {
-    constructor(container, handleFilterChange) {
-        this._container = container;
-        this._handleFilterChange = handleFilterChange;
-    }
+export default class FilterPresenter {
 
-    init(films) {
-        const watchlistedFilms = films.filter((film) => film.watchlist);
-        const favoriteFilms = films.filter((film) => film.favorite);
-        const historyFilms = films.filter((film) => film.watched);
+  constructor(container, handleFilterChange) {
+    this._container = container;
+    this._handleFilterChange = handleFilterChange;
+  }
 
-        const filterData = {
-            watchlist: watchlistedFilms,
-            favorite: favoriteFilms,
-            history: historyFilms,
-        };
+  init(films, currentFilterType) {
+    const watchlistedFilms = (films) => films.filter((films) => films.userInfo.watchlist);
+    const favoriteFilms = (films) => films.filter((films) => films.userInfo.favorite);
+    const historyFilms = (films) => films.filter((films) => films.userInfo.watched);
 
-        const filterComponent = new SortListView(/* ПЕРЕДАТЬ СЮДА ПАРАМЕТРЫ С ФИЛЬМАМИ, ЧТОБЫ ОТОБРАЖАТЬ КОЛИЧЕСТВО */);
-        filterComponent.setSortTypeChangeHandler(/* При нажатии на КНОПОЧКУ БЛЯТЬ/ВАРИАНТ НАХУЙ ВЫБОРА СОРТИРОВКИ вызвать функцию handleFilterChange с выбранным значением */);
+
+    const filterData = {
+      watchlist: watchlistedFilms,
+      favorite: favoriteFilms,
+      history: historyFilms,
+    };
+
+    const filterComponent = new SortListView(/* ПЕРЕДАТЬ СЮДА ПАРАМЕТРЫ С ФИЛЬМАМИ, ЧТОБЫ ОТОБРАЖАТЬ КОЛИЧЕСТВО */);
+    filterComponent.setSortTypeChangeHandler(/* При нажатии на КНОПОку выбрать ВАРИАНТ СОРТИРОВКИ вызвать функцию handleFilterChange с выбранным значением */);
+  }
 }
