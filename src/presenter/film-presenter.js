@@ -2,10 +2,6 @@ import { render, InsertPlace, remove, replace } from '../utils/render.js';
 import FilmCardView from '../view/film-card.js';
 import FilmDetailsView from '../view/film-details.js';
 
-
-// Возможно биндить обработчики на сортировку под плакатом фильма нужно в другом презенторе?
-
-
 const Mode = {
   CLOSED: 'CLOSED',
   OPEN: 'OPEN',
@@ -29,36 +25,48 @@ export default class FilmPresenter {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+
+    this.resetFilm = this.resetFilm.bind(this);
+
+    this._replacePopUpToFilm = this._replacePopUpToFilm.bind(this);
   }
 
   init(film) {
     this._film = film;
 
     const prevFilmCard = this._filmElementCard;
+    const prevPopup = this._filmDetailsCard;
 
     this._filmElementCard  = new FilmCardView(this._film);
     this._filmDetailsCard = new FilmDetailsView(this._film);
 
+    this._filmElementCard.getElement();
+    this._filmDetailsCard.getElement();
 
-    if (prevFilmCard === null) {
+    this._filmElementCard.setClickHandler(this._handleEditClick);
+    this._filmElementCard.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmElementCard.setWathlistClickHandler(this._handleWatchlistClick);
+    this._filmElementCard.setWatchedClickHandler(this._handleWatchedClick);
+
+    this._filmDetailsCard.setClickHandler(this._replacePopUpToFilm);
+
+    if (prevFilmCard === null || prevPopup === null) {
       render(this._filmContainer, this._filmElementCard, InsertPlace.BEFORE_END);
-      this._filmElementCard.setClickHandler(this._handleEditClick);
-      this._filmElementCard.setFavoriteClickHandler(this._handleFavoriteClick);
-      this._filmElementCard.setWathlistClickHandler(this._handleWatchlistClick);
-      this._filmElementCard.setWatchedClickHandler(this._handleWatchedClick);
       return;
     }
 
     // if (this._filmContainer.contains(prevFilmCard.getElement())) {
     if (this._popUpStatus === Mode.CLOSED) {
       replace(this._filmElementCard, prevFilmCard);
-      this._filmElementCard.setClickHandler(this._handleEditClick);
-      this._filmElementCard.setFavoriteClickHandler(this._handleFavoriteClick);
-      this._filmElementCard.setWathlistClickHandler(this._handleWatchlistClick);
-      this._filmElementCard.setWatchedClickHandler(this._handleWatchedClick);
+    }
+
+    if (this._bodyElement.contains(prevPopup.getElement())) {
+      replace(this._filmDetailsCard, prevPopup);
     }
 
     remove(prevFilmCard);
+    remove(prevPopup);
+
   }
 
   _handleWatchedClick() {
@@ -113,14 +121,13 @@ export default class FilmPresenter {
     remove(this._filmElementCard);
   }
 
-  _resetFilm() {
+  resetFilm() {
     if (this._popUpStatus !== Mode.CLOSED) {
       this._replacePopUpToFilm();
     }
   }
 
   _replaceFilmToPopUp() {
-    replace(this._filmElementCard, this._filmDetailsCard);
     document.addEventListener('keydown', this._escKeyDownHandler);
 
     this._bodyElement.classList.add('hide-overflow');
@@ -130,11 +137,9 @@ export default class FilmPresenter {
   }
 
   _replacePopUpToFilm() {
-    replace(this._filmDetailsCard, this._filmElementCard);
     document.removeEventListener('keydown',this._escKeyDownHandler);
 
-    this._filmDetailsCard._element.remove();
-    this._filmDetailsCard._element = null;
+    this._filmDetailsCard.getElement().remove();
     this._bodyElement.classList.remove('hide-overflow');
     this._popUpStatus === Mode.CLOSED;
   }
@@ -147,6 +152,6 @@ export default class FilmPresenter {
   }
 
   _handleEditClick() {
-    this._replaceFilmToPopUp;
+    this._replaceFilmToPopUp();
   }
 }
