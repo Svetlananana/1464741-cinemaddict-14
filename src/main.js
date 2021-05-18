@@ -4,9 +4,6 @@ import MainPage from './presenter/main-page.js';
 const FILM_COUNT_LIST = 20;
 
 const bodyElement = document.querySelector('body');
-// const mainElement = bodyElement.querySelector('.main');
-// const headerElement = bodyElement.querySelector('.header');
-// const ooterElement =  bodyElement.querySelector('.footer');
 
 const filmCards = new Array(FILM_COUNT_LIST).fill().map(generateFilm);
 

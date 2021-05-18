@@ -69,11 +69,13 @@ export default class MainPage {
       .getElement()
       .querySelector('.films-list__container');
 
+    this._renderProfileUser();
+    this._renderMenu();
+    this._renderSortList();
 
     this._renderFilms(0, INITIAL_FILMS_COUNT);
 
-    this._renderProfileUser();
-    this._renderMenu();
+
     this._renderStatistics();
   }
 
@@ -83,8 +85,15 @@ export default class MainPage {
 
     //Перерисовывать и фильтрацию. Чтобы было актуальным количество
   }
+  // export const FILTER = {
+  //   ALL_MOVIES: 'All movies',
+  //   WATCHLIST: 'Watchlist',
+  //   FAVORITES: 'Favorites',
+  //   HISTORY: 'History',
+  //   STATS: 'Stats',
+  // };
 
-  _handleSortTypeChange(sortType) {
+  _sortFilms(sortType) {
     switch(sortType) {
       case 'ALL':
         this._films = this._sourcedFilms;
@@ -101,10 +110,14 @@ export default class MainPage {
       default:
         this._films = this._sourcedFilms;
     }
+  }
 
-     // Удалить все фильмы и перерисовать их
-     // Перерисовать презентер фильтрации
-
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortFilms(sortType);
+    this._clearFilmList();
   }
 
   _renderNoFilms() {
@@ -181,5 +194,4 @@ export default class MainPage {
   _renderStatistics() {
     render(this._footerElement, this._statisticsComponent, InsertPlace.BEFORE_END);
   }
-
 }

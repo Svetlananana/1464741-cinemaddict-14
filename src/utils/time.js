@@ -17,7 +17,6 @@ export const formatDate = (date, format = DateFormat.COMMENT) => {
   return dayjs(date).format(format);
 };
 
-
 // export const humanizeDuration = (durationTime) => {
 //   dayjs.extend(duration);
 
