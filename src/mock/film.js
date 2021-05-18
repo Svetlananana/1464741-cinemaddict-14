@@ -1,4 +1,5 @@
 import { generateDate } from '../utils/time.js';
+import { nanoid } from 'nanoid';
 
 import {
   getRandomNumber,
@@ -23,11 +24,10 @@ import {
 import { generateComment } from './comments.js';
 
 const MAX_FILM_RATING = 10;
-const MAX_ID = 1000;
 
 export const generateFilm = () => {
   return {
-    id: getRandomNumber(0, MAX_ID),
+    id: nanoid(),
     comments: new Array(getRandomNumber(MIN_COUNT_ELEMENT, MAX_COUNT_ELEMENT)).fill().map(() => generateComment()),
     filmInfo: {
       title: getRandomArrayItem(TITLES),

@@ -1,13 +1,11 @@
 import { PEOPLE, DESCRIPTIONS, EMOTIONS } from './data';
 import { getRandomArrayItem } from '../utils/random';
 import { generateDate } from '../utils/time.js';
-
-
-let id = 0;
+import { nanoid } from 'nanoid';
 
 export const generateComment = () => {
   return {
-    id: ++id,
+    id: nanoid(),
     author: getRandomArrayItem(PEOPLE),
     text: getRandomArrayItem(DESCRIPTIONS),
     date:  generateDate(),
