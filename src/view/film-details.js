@@ -148,6 +148,7 @@ export default class FilmDetails extends Abstract {
     super();
     this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+    this.setClickHandler = this.setClickHandler.bind(this);
   }
 
   getTemplate() {

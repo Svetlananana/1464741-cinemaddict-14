@@ -16,3 +16,15 @@ export const generateDate = (date = 0) => {
 export const formatDate = (date, format = DateFormat.COMMENT) => {
   return dayjs(date).format(format);
 };
+
+// export const humanizeDuration = (durationTime) => {
+//   dayjs.extend(duration);
+
+//   return `${dayjs.duration(durationTime, 'minutes').hours()}h ${dayjs.duration(durationTime, 'minutes').minutes()}m`;
+// };
+
+// export const humanizeCommentDate = (date) => {
+//   dayjs.extend(relativeTime);
+
+//   return `${dayjs(date).toNow(true)} ago`;
+// };

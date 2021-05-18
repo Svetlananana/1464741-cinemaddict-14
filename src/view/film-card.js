@@ -1,4 +1,3 @@
-// import { InsertPlace, render, createElement, BODY } from '../utils/render.js';
 import FilmButtonCard, {ButtonType} from './film-button-card';
 import { DateFormat, formatDate } from '../utils/time.js';
 import Abstract from './abstract.js';
@@ -57,6 +56,14 @@ export default class FilmCard extends Abstract {
     super();
     this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+    this._wathlistClicklHandler = this._wathlistClicklHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+
+    this.setClickHandler = this.setClickHandler.bind(this);
+    this.setWathlistClickHandler = this.setWathlistClickHandler.bind(this);
+    this.setWatchedClickHandler = this.setWatchedClickHandler.bind(this);
+    this.setFavoriteClickHandler = this.setFavoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -66,6 +73,42 @@ export default class FilmCard extends Abstract {
   _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
+  }
+
+  _wathlistClicklHandler(evt) {
+    evt.preventDefault();
+    this._callback.wathlistClick();
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setWathlistClickHandler(callback) {
+    this._callback.wathlistClick = callback;
+    this._element
+      .querySelector('.film-card__controls-item--add-to-watchlist')
+      .addEventListener('click', this._wathlistClicklHandler);
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this._element
+      .querySelector('.film-card__controls-item--mark-as-watched')
+      .addEventListener('click', this._watchedClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this._element
+      .querySelector('.film-card__controls-item--favorite')
+      .addEventListener('click', this._favoriteClickHandler);
   }
 
   setClickHandler(callback) {
