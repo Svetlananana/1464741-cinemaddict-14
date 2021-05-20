@@ -34,6 +34,7 @@ export default class SortList extends Abstract {
 
     this._sortType = sortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+    this.setSortTypeChangeHandler = this.setSortTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
@@ -46,7 +47,7 @@ export default class SortList extends Abstract {
     }
 
     evt.preventDefault();
-    this._callback.sortTypeChange(evt.target.dataset.sortType);
+    this._callback.sortTypeChange(evt.target.dataset.sort);
   }
 
   setSortTypeChangeHandler(callback) {
