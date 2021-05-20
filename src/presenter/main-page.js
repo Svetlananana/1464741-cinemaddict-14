@@ -1,5 +1,6 @@
 import { render, InsertPlace, remove, updateItem} from '../utils/render.js';
 import { SortType } from '../utils/const.js';
+import { sortFilmsByDate, sortFilmsByRating } from '../utils/films.js';
 
 import ProfileUserView from '../view/profile-user.js';
 import MenuView from '../view/menu.js';
@@ -29,21 +30,22 @@ export default class MainPage {
     this._footerElement = this._bodyElement.querySelector('.footer');
     this._statisticsMoviesContainer = this._footerElement.querySelector('.footer__statistics');
 
-    this._filmBlockComponent = new FilmBlockView();
-    this._filmListAllComponent = new FilmListAllView();
 
     this._profileUserComponent = new ProfileUserView();
     this._menuComponent = new MenuView();
     this._sortListComponent = new SortListView();
-    this._noFilmComponent = new NoFilmsMessageView();
 
+    this._filmBlockComponent = new FilmBlockView();
+    this._filmListAllComponent = new FilmListAllView();
+    this._noFilmComponent = new NoFilmsMessageView();
     this._showMoreButtonComponent = new ShowMoreButtonView();
+
     this._statisticsComponent = new StatisticsView();
 
     this._renderFilm = this._renderFilm.bind(this);
-    this._handleModeChange = this._handleModeChange.bind(this);
-
     this._renderFilms = this._renderFilms.bind(this);
+
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._handleFilmChange = this._handleFilmChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
@@ -55,61 +57,46 @@ export default class MainPage {
 
     this._renderedFilmsCount = 0;
 
+    this._renderProfileUser();
+    this._renderMenu();
+    this._renderSortList();
+
     if (!this._films.length) {
       this._renderNoFilms();
       return;
     }
 
-
     render(this._mainElement, this._filmBlockComponent, InsertPlace.BEFORE_END);
     render(this._filmBlockComponent, this._filmListAllComponent, InsertPlace.BEFORE_END);
-
 
     this._allFilmsListContainer = this._filmListAllComponent
       .getElement()
       .querySelector('.films-list__container');
 
-    this._renderProfileUser();
-    this._renderMenu();
-    this._renderSortList();
-
     this._renderFilms(0, INITIAL_FILMS_COUNT);
-
 
     this._renderStatistics();
   }
 
   _handleFilmChange(updateFilm) {  // 5.1.12 Реализует логику обновления задачи
     this._films = updateItem(this._films, updateFilm);
+    this._sourcedFilms = updateItem(this._sourcedFilms, updateFilm);
     this._filmPresenter[updateFilm.id].init(updateFilm);
-
-    //Перерисовывать и фильтрацию. Чтобы было актуальным количество
   }
-  // export const FILTER = {
-  //   ALL_MOVIES: 'All movies',
-  //   WATCHLIST: 'Watchlist',
-  //   FAVORITES: 'Favorites',
-  //   HISTORY: 'History',
-  //   STATS: 'Stats',
-  // };
 
   _sortFilms(sortType) {
     switch(sortType) {
-      case 'ALL':
-        this._films = this._sourcedFilms;
+      case SortType.DATE:
+        this._films.sort(sortFilmsByDate);
         break;
-      case 'HISTORY':
-        this._films = getHistoryFilms(this._sourcedFilms); //Поиск по критерию
-        break;
-      case 'WATCHLIST':
-        this._films = getWatchlistFilms(this._sourcedFilms); //Поиск по критерию
-        break;
-      case 'FAVORITE':
-        this._films = getFavoriteFilms(this._sourcedFilms); //Поиск по критерию
+      case SortType.RATING:
+        this._films.sort(sortFilmsByRating);
         break;
       default:
-        this._films = this._sourcedFilms;
+        this._films = this._sourcedFilms.slice();
     }
+
+    this._currentSortType = sortType;
   }
 
   _handleSortTypeChange(sortType) {
@@ -118,6 +105,7 @@ export default class MainPage {
     }
     this._sortFilms(sortType);
     this._clearFilmList();
+    this._renderFilms(0, INITIAL_FILMS_COUNT);
   }
 
   _renderNoFilms() {
@@ -154,7 +142,7 @@ export default class MainPage {
     }
   }
 
-  _clearFilmList() {   // 5.1.11 Реализует очистку списка
+  _clearFilmList() {
     Object
       .values(this._filmPresenter)
       .forEach((presenter) => presenter.destroy());
@@ -168,11 +156,13 @@ export default class MainPage {
   }
 
   _renderMenu() {
-    render(this._mainElement, this._menuComponent, InsertPlace.AFTER_BEGIN);
+    render(this._mainElement, this._menuComponent, InsertPlace.BEFORE_END);
   }
 
   _renderSortList() {
     render(this._mainElement, this._sortListComponent, InsertPlace.BEFORE_END);
+    this._sortListComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+
   }
 
   _renderFilmBlock() {

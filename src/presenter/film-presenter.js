@@ -27,7 +27,6 @@ export default class FilmPresenter {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
 
     this.resetFilm = this.resetFilm.bind(this);
-
     this._replacePopUpToFilm = this._replacePopUpToFilm.bind(this);
   }
 
