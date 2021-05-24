@@ -2,13 +2,10 @@ import { generateDate } from '../utils/time.js';
 import { nanoid } from 'nanoid';
 
 import {
-  getRandomNumber,
   getRandomFixedFloat,
   getRandomBoolean,
   getRandomArrayItem,
-  getRandomArrayItems,
-  MIN_COUNT_ELEMENT,
-  MAX_COUNT_ELEMENT
+  getRandomArrayItems
 } from '../utils/random';
 
 import {
@@ -21,14 +18,14 @@ import {
   GENRES
 } from './data';
 
-import { generateComment } from './comments.js';
+import { generateCommentsList } from './comments.js';
 
 const MAX_FILM_RATING = 10;
 
 export const generateFilm = () => {
   return {
     id: nanoid(),
-    comments: new Array(getRandomNumber(MIN_COUNT_ELEMENT, MAX_COUNT_ELEMENT)).fill().map(() => generateComment()),
+    comments: generateCommentsList(),
     filmInfo: {
       title: getRandomArrayItem(TITLES),
       alternativeTitle: getRandomArrayItem(TITLES),
@@ -47,10 +44,10 @@ export const generateFilm = () => {
       description: getRandomArrayItems(DESCRIPTIONS).join('. '),
     },
     userDetails: {
-      watchlist: getRandomBoolean(),
-      alreadyWatched: getRandomBoolean(),
+      isWatchlist: getRandomBoolean(),
+      isWatched: getRandomBoolean(),
       watchingDate: generateDate(),
-      favorite: getRandomBoolean(),
+      isFavorite: getRandomBoolean(),
     },
   };
 };
