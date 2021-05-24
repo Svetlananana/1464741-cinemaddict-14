@@ -52,9 +52,10 @@ export const createFilmCardTemlate = (film) => {
 };
 
 export default class FilmCard extends Abstract {
-  constructor(film) {
+  constructor(data) {
     super();
-    this._film = film;
+    // this._film = film;
+    this._data = data;
     this._clickHandler = this._clickHandler.bind(this);
     this._wathlistClicklHandler = this._wathlistClicklHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
@@ -67,7 +68,7 @@ export default class FilmCard extends Abstract {
   }
 
   getTemplate() {
-    return createFilmCardTemlate(this._film);
+    return createFilmCardTemlate(this._data);
   }
 
   _clickHandler(evt) {
