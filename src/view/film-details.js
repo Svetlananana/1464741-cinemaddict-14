@@ -2,8 +2,7 @@ import Smart from './smart.js';
 import Genres from './film-genres.js';
 import { DateFormat, formatDate, getHumanizeCommentDate } from '../utils/time.js';
 import { FilmCardStatus } from '../utils/const.js';
-import { generateComment } from '../mock/comments.js';
-
+// import { generateComment } from '../mock/comments.js';
 // import FilmDetailsControls from './film-controls.js';
 // import FilmComment from '../view/comment.js';
 
