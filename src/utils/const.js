@@ -3,3 +3,11 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+
+export const FilmCardStatus = {
+  DELETE: 'delete',
+  DISABLED: 'disable',
+  DEFAULT: 'default',
+  SUBMIT: 'submit',
+  ABORTING: 'aborting',
+};
