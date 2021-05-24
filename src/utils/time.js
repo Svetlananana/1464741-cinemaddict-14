@@ -8,6 +8,46 @@ export const DateFormat = {
   TIME: 'hh:mm',
 };
 
+const DateFormatTypes = [
+  {
+    TYPE: 'minute',
+    COUNTE: 60,
+  },
+  {
+    TYPE: 'hour',
+    COUNTE: 24,
+  },
+  {
+    TYPE: 'day',
+    COUNTE: 7,
+  },
+  {
+    TYPE: 'week',
+    COUNTE: 4,
+  },
+  {
+    TYPE: 'month',
+    COUNTE: 12,
+  },
+  {
+    TYPE: 'year',
+    COUNTE: 2022,
+  },
+];
+
+export const getHumanizeCommentDate = (data) => {
+  for (let i = 0; i < DateFormatTypes.length; i++) {
+    const currentDate = DateFormatTypes[i];
+    const diff = dayjs().diff((data), currentDate.TYPE);
+    if (diff === 0) {
+      return 'now';
+    }
+    if (diff < currentDate.COUNTE) {
+      return `${diff} ${currentDate.TYPE} ago`;
+    }
+  }
+};
+
 export const generateDate = (date = 0) => {
   const yearsGap = getRandomNumber(date, 0);
   return dayjs().add(yearsGap, 'year').toDate();
