@@ -2,9 +2,6 @@ import Smart from './smart.js';
 import Genres from './film-genres.js';
 import { DateFormat, formatDate, getHumanizeCommentDate } from '../utils/time.js';
 import { FilmCardStatus } from '../utils/const.js';
-// import { generateComment } from '../mock/comments.js';
-// import FilmDetailsControls from './film-controls.js';
-// import FilmComment from '../view/comment.js';
 
 const createNewComment = (comment, emoji) => {
   return {
@@ -53,28 +50,6 @@ export const createFilmDetailsTemplate = (data) => {
   <input type="checkbox" ${isFavorite ? 'checked' : ''} ${isDisable ? 'disabled' : ''}class="film-details__control-input visually-hidden" id="favorite" name="favorite">
   <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
   };
-
-  // const createFilmComment = (comment) => {
-  //   const {author, text, date, emotion} = comment;
-
-  //   return `
-  //   <li class="film-details__comment">
-  //   <span class="film-details__comment-emoji">
-  //     <img src=${emotion} width="55" height="55" alt="emoji-smile">
-  //   </span>
-  //   <div>
-  //     <p class="film-details__comment-text">${text}</p>
-  //     <p class="film-details__comment-info">
-  //       <span class="film-details__comment-author">${author}</span>
-  //       <span class="film-details__comment-day">${formatDate(date, DateFormat.COMMENT)}</span>
-  //       <button class="film-details__comment-delete">Delete</button>
-  //     </p>
-  //   </div>
-  // </li>`;
-  // };
-  // const commentList = data.comments.map((comment) => {
-  //   return createFilmComment(comment);
-  // }).join('');
 
   const createCommentList = () => {
     return `${comments.map((comment) =>  `<li class="film-details__comment">
@@ -324,28 +299,25 @@ export default class FilmDetails extends Smart {
   // }
 
   // _setSendNewCommentHandler(evt) {
-  //   if((evt.ctrlKey || evt.metaKey) && evt.keyCode == 13) {
-  //     if (!this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim())) {
-  //       return;
-  //     }
-  //     this._data = FilmDetails.parseDataToFilm(this._data);
+  //   const isRightKeys = (evt.ctrlKey || evt.metaKey) && evt.keyCode === 13;
+  //   if (!isRightKeys) {
+  //     return;
+  //   }
+  //   const isEmptyTextContentAndEmoji = !this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim());
+  //   if (!isEmptyTextContentAndEmoji) {
   //     this._callback.setSendNewComment(this._data, createNewComment(this._data.currentCommentText, this._data.currentEmoji));
+  //     this._data = FilmDetails.parseDataToFilm(this._data);
   //     this.updateElement();
   //   }
   // }
 
-
   _setSendNewCommentHandler(evt) {
-    const isRightKeys = (evt.ctrlKey || evt.metaKey) && evt.keyCode === 13;
-    if (!isRightKeys) {
-      return;
-    }
-
-    const isEmptyTextContentAndEmoji = !this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim());
-
-    if (!isEmptyTextContentAndEmoji) {
-      this._callback.setSendNewComment(this._data, createNewComment(this._data.currentCommentText, this._data.currentEmoji));
+    if((evt.ctrlKey || evt.metaKey) && evt.keyCode == 13) {
+      if (!this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim())) {
+        return;
+      }
       this._data = FilmDetails.parseDataToFilm(this._data);
+      this._callback.setSendNewComment(this._data, createNewComment(this._data.currentCommentText, this._data.currentEmoji));
       this.updateElement();
     }
   }
