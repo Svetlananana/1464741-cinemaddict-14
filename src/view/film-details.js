@@ -2,6 +2,7 @@ import Smart from './smart.js';
 import Genres from './film-genres.js';
 import { DateFormat, formatDate, getHumanizeCommentDate } from '../utils/time.js';
 import { FilmCardStatus } from '../utils/const.js';
+import he from 'he';
 
 const createNewComment = (comment, emoji) => {
   return {
@@ -9,7 +10,6 @@ const createNewComment = (comment, emoji) => {
     'emotion': emoji,
   };
 };
-
 
 export const createFilmDetailsTemplate = (data) => {
   const {
@@ -57,7 +57,7 @@ export const createFilmDetailsTemplate = (data) => {
       <img src=${comment.emotion} width="55" height="55" alt="emoji-smile">
     </span>
     <div>
-      <p class="film-details__comment-text">${comment.text}</p>
+      <p class="film-details__comment-text">${he.encode(comment.text)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${comment.author}</span>
         <span class="film-details__comment-day">${getHumanizeCommentDate(comment.date)}</span>
@@ -140,7 +140,7 @@ export const createFilmDetailsTemplate = (data) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
           ${createCommentList()}
@@ -192,7 +192,7 @@ export default class FilmDetails extends Smart {
     this._comments = comments;
 
     this.setClickHandler = this.setClickHandler.bind(this);
-    this.setDeleteComment = this.setDeleteComment.bind(this);
+    this.setDeleteCommentHandler = this.setDeleteCommentHandler.bind(this);
     this.setChangeFilmCardControlsHandler = this.setChangeFilmCardControlsHandler.bind(this);
     this.setSendNewComment = this.setSendNewComment.bind(this);
     this._changeEmojiHandler = this._changeEmojiHandler.bind(this);
@@ -202,12 +202,19 @@ export default class FilmDetails extends Smart {
     this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
     this._onControlsChange = this._onControlsChange.bind(this);
 
+    this._wathlistClicklHandler = this._wathlistClicklHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+
+    this.setWathlistClickHandler = this.setWathlistClickHandler.bind(this);
+    this.setWatchedClickHandler = this.setWatchedClickHandler.bind(this);
+    this.setFavoriteClickHandler = this.setFavoriteClickHandler.bind(this);
 
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._data);
+    return createFilmDetailsTemplate(this._data, this._comments);
   }
 
   getButtonClose() {
@@ -222,11 +229,47 @@ export default class FilmDetails extends Smart {
     return this.getElement().querySelector('.film-details__comment-input');
   }
 
+  _wathlistClicklHandler(evt) {
+    evt.preventDefault();
+    this._callback.wathlistClick();
+  }
+
+  _watchedClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setWathlistClickHandler(callback) {
+    this._callback.wathlistClick = callback;
+    this._element
+      .querySelector('#watchlist')
+      .addEventListener('change', this._wathlistClicklHandler);
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this._element
+      .querySelector('#watched')
+      .addEventListener('change', this._watchedClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this._element
+      .querySelector('#favorite')
+      .addEventListener('change', this._favoriteClickHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setChangeFilmCardControlsHandler(this._callback.changeInputControl);
     this.setClickHandler(this._callback.closeButtonClick);
-    // this.setSendNewComment(this._callback.setSendNewComment);
+    this.setSendNewComment(this._callback.setSendNewComment);
   }
 
   reset(filmCard) {
@@ -287,30 +330,6 @@ export default class FilmDetails extends Smart {
     this._callback.setSendNewComment = callback;
   }
 
-  // _setSendNewCommentHandler(evt) {
-  //   if((evt.ctrlKey || evt.metaKey) && evt.keyCode == 13) {
-  //     if (!this._data.currentEmoji || !this._data.currentCommentText) {
-  //       return;
-  //     }
-  //     this._data = FilmDetails.parseDataToFilm(this._data);
-  //     this._callback.setSendNewComment(this._data);
-  //     this.updateElement();
-  //   }
-  // }
-
-  // _setSendNewCommentHandler(evt) {
-  //   const isRightKeys = (evt.ctrlKey || evt.metaKey) && evt.keyCode === 13;
-  //   if (!isRightKeys) {
-  //     return;
-  //   }
-  //   const isEmptyTextContentAndEmoji = !this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim());
-  //   if (!isEmptyTextContentAndEmoji) {
-  //     this._callback.setSendNewComment(this._data, createNewComment(this._data.currentCommentText, this._data.currentEmoji));
-  //     this._data = FilmDetails.parseDataToFilm(this._data);
-  //     this.updateElement();
-  //   }
-  // }
-
   _setSendNewCommentHandler(evt) {
     if((evt.ctrlKey || evt.metaKey) && evt.keyCode == 13) {
       if (!this._data.currentEmoji || (!this._data.currentCommentText || !this._data.currentCommentText.trim())) {
@@ -322,7 +341,6 @@ export default class FilmDetails extends Smart {
     }
   }
 
-
   _deleteCommentHandler(evt) {
     if (!evt.target.classList.contains('film-details__comment-delete')) {
       return;
@@ -331,7 +349,7 @@ export default class FilmDetails extends Smart {
     this._callback.deleteComment(evt.target.dataset.commentId);
   }
 
-  setDeleteComment(callback) {
+  setDeleteCommentHandler(callback) {
     this._callback.deleteComment = callback;
   }
 
@@ -407,8 +425,8 @@ export default class FilmDetails extends Smart {
       {},
       filmCard,
       {
-        currentEmoji: 'currentEmoji' in filmCard,
-        currentCommentText: '',
+        currentEmoji: false,
+        currentCommentText: false,
         isDelete: false,
         isSave: false,
         isDisable: false,
