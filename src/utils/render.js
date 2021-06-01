@@ -1,10 +1,10 @@
 import Abstract from '../view/abstract.js';
 
 export const InsertPlace = {
-  BEFORE_END: 'beforeend',  //  сразу перед закрывающим тегом element (после последнего потомка)
-  AFTER_BEGIN: 'afterbegin', // сразу после открывающего тега  element (перед первым потомком)
-  BEFORE_BEGIN: 'beforebegin', // до самого element (до открывающего тега)
-  AFTER_END: 'afterend', // после element (после закрывающего тега)
+  BEFORE_END: 'beforeend',
+  AFTER_BEGIN: 'afterbegin',
+  BEFORE_BEGIN: 'beforebegin',
+  AFTER_END: 'afterend',
 };
 
 export const render = (container, element, place) => {
@@ -26,10 +26,6 @@ export const render = (container, element, place) => {
   }
 };
 
-// Принцип работы прост:
-// 1. создаём пустой div-блок
-// 2. берём HTML в виде строки и вкладываем в этот div-блок, превращая в DOM-элемент
-// 3. возвращаем этот DOM-элемент
 export const createElement = (template) => {
   const newElement = document.createElement('div'); // 1
   newElement.innerHTML = template.trim(); // 2
@@ -66,18 +62,4 @@ export const remove = (component) => {
 
   component.getElement().remove();
   component.removeElement();
-};
-
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
 };

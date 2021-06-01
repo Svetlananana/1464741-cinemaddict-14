@@ -19,9 +19,9 @@ export const createFilmCardTemlate = (film) => {
       },
     },
     userDetails: {
-      watchlist,
-      alreadyWatched,
-      favorite,
+      isWatchlist,
+      isWatched,
+      isFavorite,
     },
   } = film;
 
@@ -44,9 +44,9 @@ export const createFilmCardTemlate = (film) => {
 
   <a class="film-card__comments">${comments.length} comments</a>
   <div class="film-card__controls">
-  ${new FilmButtonCard(ButtonType.WATCHLIST, watchlist).getTemplate()}
-  ${new FilmButtonCard(ButtonType.ALREADY_WATCHED, alreadyWatched).getTemplate()}
-  ${new FilmButtonCard(ButtonType.FAVORITE, favorite).getTemplate()}
+  ${new FilmButtonCard(ButtonType.WATCHLIST, isWatchlist).getTemplate()}
+  ${new FilmButtonCard(ButtonType.ALREADY_WATCHED, isWatched).getTemplate()}
+  ${new FilmButtonCard(ButtonType.FAVORITE, isFavorite).getTemplate()}
   </div>
 </article>`;
 };
@@ -54,7 +54,6 @@ export const createFilmCardTemlate = (film) => {
 export default class FilmCard extends Abstract {
   constructor(data) {
     super();
-    // this._film = film;
     this._data = data;
     this._clickHandler = this._clickHandler.bind(this);
     this._wathlistClicklHandler = this._wathlistClicklHandler.bind(this);

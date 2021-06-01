@@ -1,6 +1,8 @@
 import { render, InsertPlace, remove, replace } from '../utils/render.js';
+import { UserAction, UpdateType } from '../utils/const.js';
 import FilmCardView from '../view/film-card.js';
 import FilmDetailsView from '../view/film-details.js';
+// import {deleteItemById} from '../utils/items.js';
 
 const Mode = {
   CLOSED: 'CLOSED',
@@ -47,14 +49,29 @@ export default class FilmPresenter {
     this._filmElementCard.setWathlistClickHandler(this._handleWatchlistClick);
     this._filmElementCard.setWatchedClickHandler(this._handleWatchedClick);
 
+    this._filmDetailsCard.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmDetailsCard.setWatchedClickHandler(this._handleWatchedClick);
+    this._filmDetailsCard.setWathlistClickHandler(this._handleWatchlistClick);
+
     this._filmDetailsCard.setClickHandler(this._replacePopUpToFilm);
+
+    // this._filmDetailsCard.setDeleteCommentHandler((id) => {
+    //   this._handleChangeData(
+    //     UserAction.UPDATE_FILM,
+    //     UpdateType.MINOR,
+    //     Object.assign(
+    //       {},
+    //       this._film,
+    //       {
+    //         comments: deleteItemById(this._film.comments, id),
+    //       }),
+    //   );});
 
     if (prevFilmCard === null || prevPopup === null) {
       render(this._filmContainer, this._filmElementCard, InsertPlace.BEFORE_END);
       return;
     }
 
-    // if (this._filmContainer.contains(prevFilmCard.getElement())) {
     if (this._popUpStatus === Mode.CLOSED) {
       replace(this._filmElementCard, prevFilmCard);
     }
@@ -65,20 +82,21 @@ export default class FilmPresenter {
 
     remove(prevFilmCard);
     remove(prevPopup);
-
   }
 
   _handleWatchedClick() {
     this._handleChangeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
         {
           userDetails: {
-            alreadyWatched: !this._film.userDetails.alreadyWatched,
-            watchlist: this._film.userDetails.watchlist,
-            favorite: this._film.userDetails.favorite,
-            // Добавить потом изменение вотчдейт получая текущую дату в момент нажатия
+            isWatched: !this._film.userDetails.isWatched,
+            isWatchlist: this._film.userDetails.isWatchlist,
+            isFavorite: this._film.userDetails.isFavorite,
+            watchingDate: this._film.userDetails.watchingDate,
           },
         },
       ));
@@ -86,14 +104,17 @@ export default class FilmPresenter {
 
   _handleWatchlistClick() {
     this._handleChangeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
         {
           userDetails: {
-            watchlist: !this._film.userDetails.watchlist,
-            favorite: this._film.userDetails.favorite,
-            alreadyWatched: this._film.userDetails.alreadyWatched,
+            isWatchlist: !this._film.userDetails.isWatchlist,
+            isFavorite: this._film.userDetails.isFavorite,
+            isWatched: this._film.userDetails.isWatched,
+            watchingDate: this._film.userDetails.watchingDate,
           },
         },
       ),
@@ -102,19 +123,36 @@ export default class FilmPresenter {
 
   _handleFavoriteClick() {
     this._handleChangeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
         {
           userDetails: {
-            favorite: !this._film.userDetails.favorite,
-            watchlist: this._film.userDetails.watchlist,
-            alreadyWatched: this._film.userDetails.alreadyWatched,
+            isFavorite: !this._film.userDetails.isFavorite,
+            isWatchlist: this._film.userDetails.isWatchlist,
+            isWatched: this._film.userDetails.isWatched,
+            watchingDate: this._film.userDetails.watchingDate,
           },
         },
       ),
     );
   }
+
+  // _handleUpdateCommentClick(comments) {
+  //   this._handleChangeData(
+  //     UserAction.UPDATE_COMMENTS,
+  //     UpdateType.MINOR,
+  //     Object.assign(
+  //       {},
+  //       this._film,
+  //       {
+  //         comments,
+  //       },
+  //     ),
+  //   );
+  // }
 
   destroy() {
     remove(this._filmElementCard);
@@ -128,7 +166,6 @@ export default class FilmPresenter {
 
   _replaceFilmToPopUp() {
     document.addEventListener('keydown', this._escKeyDownHandler);
-
     this._bodyElement.classList.add('hide-overflow');
     render(this._bodyElement, this._filmDetailsCard, InsertPlace.BEFORE_END);
     this._changeMode();
@@ -137,7 +174,6 @@ export default class FilmPresenter {
 
   _replacePopUpToFilm() {
     document.removeEventListener('keydown',this._escKeyDownHandler);
-
     this._filmDetailsCard.getElement().remove();
     this._bodyElement.classList.remove('hide-overflow');
     this._popUpStatus === Mode.CLOSED;

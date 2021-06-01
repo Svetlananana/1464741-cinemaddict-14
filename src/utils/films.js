@@ -7,4 +7,3 @@ export const sortFilmsByDate = (a, b) => {
 export const sortFilmsByRating = (a, b) => {
   return b.filmInfo.totalRating - a.filmInfo.totalRating;
 };
-

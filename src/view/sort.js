@@ -1,28 +1,20 @@
 import Abstract from './abstract.js';
 import { SortType } from '../utils/const.js';
 
-// export const SortType = {
-//   DEFAULT: 'deafault',
-//   DATE: 'date',
-//   RATING: 'rating',
-// };
-
 export const createSortListTemplate = (sortType) => {
-
-  const renderActiveClass = (sortTypeClass) => (sortTypeClass === sortType) ? 'sort__button--active' : '';
 
   return `
   <ul class="sort">
   <li>
-  <a href="#" class="sort__button ${renderActiveClass(SortType.DEFAULT)}" data-sort="${SortType.DEFAULT}">Sort by default</a>
+  <a href="#" class="sort__button ${sortType === SortType.DEFAULT ? 'sort__button--active' : ''}" data-sort="${SortType.DEFAULT}">Sort by default</a>
   </li>
 
   <li>
-  <a href="#" class="sort__button ${renderActiveClass(SortType.DATE)}" data-sort="${SortType.DATE}">Sort by date</a>
+  <a href="#" class="sort__button ${sortType === SortType.DATE ? 'sort__button--active' : ''}" data-sort="${SortType.DATE}">Sort by date</a>
   </li>
 
   <li>
-  <a href="#" class="sort__button ${renderActiveClass(SortType.RATING)}" data-sort="${SortType.RATING}">Sort by rating</a>
+  <a href="#" class="sort__button ${sortType === SortType.RATING ? 'sort__button--active' : ''}" data-sort="${SortType.RATING}">Sort by rating</a>
   </li>
 </ul>`;
 };

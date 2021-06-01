@@ -1,43 +1,70 @@
-// // import { render, InsertPlace, remove, replace } from '../utils/render.js';
-// import SortListView from '../view/sort.js';
-// import dayjs from 'dayjs';
+import { render, InsertPlace, remove, replace } from '../utils/render.js';
+import { FilterType } from '../utils/const.js';
+import { filtersFunction } from '../utils/filter.js';
+import FilterView from '../view/filter.js';
 
-// const sortFilmsByDate = (filmA, filmB) => {
-//   return dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
-// };
+export default class FilterPresenter {
 
-// const sortFilmsByRating = (filmA, filmB) => {
-//   return filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
-// };
+  constructor(container, filterModel, filmsModel) {
+    this._filterContainer = container;
+    this._filterModel = filterModel;
+    this._filmsModel = filmsModel;
 
-// export const FILTER = {
-//   ALL_MOVIES: 'All movies',
-//   WATCHLIST: 'Watchlist',
-//   FAVORITES: 'Favorites',
-//   HISTORY: 'History',
-//   STATS: 'Stats',
-// };
+    this._filterComponent = null;
 
-// export default class FilterPresenter {
+    this._handleFilterClick = this._handleFilterClick.bind(this);
+    this._handleFromModel = this._handleFromModel.bind(this);
 
-//   constructor(container, handleFilterChange) {
-//     this._container = container;
-//     this._handleFilterChange = handleFilterChange;
-//   }
+    this._filterModel.addObserver(this._handleFromModel);
+    this._filmsModel.addObserver(this._handleFromModel);
+  }
 
-//   init(films, currentFilterType) {
-//     const watchlistedFilms = (films) => films.filter((films) => films.userInfo.watchlist);
-//     const favoriteFilms = (films) => films.filter((films) => films.userInfo.favorite);
-//     const historyFilms = (films) => films.filter((films) => films.userInfo.watched);
+  init() {
+    const prevFilterComponent = this._filterComponent;
+    this._filterComponent = new FilterView(this._getFilter(), this._filterModel.getFilter());
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterClick);
 
+    if (prevFilterComponent === null) {
+      render(this._filterContainer, this._filterComponent, InsertPlace.BEFORE_END);
+      return;
+    }
 
-//     const filterData = {
-//       watchlist: watchlistedFilms,
-//       favorite: favoriteFilms,
-//       history: historyFilms,
-//     };
+    replace(this._filterComponent, prevFilterComponent);
+    remove(prevFilterComponent);
+  }
 
-//     const filterComponent = new SortListView(/* ПЕРЕДАТЬ СЮДА ПАРАМЕТРЫ С ФИЛЬМАМИ, ЧТОБЫ ОТОБРАЖАТЬ КОЛИЧЕСТВО */);
-//     filterComponent.setSortTypeChangeHandler(/* При нажатии на КНОПОку выбрать ВАРИАНТ СОРТИРОВКИ вызвать функцию handleFilterChange с выбранным значением */);
-//   }
-// }
+  _handleFromModel() {
+    this.init();
+  }
+
+  _handleFilterClick(updateType, filterType) {
+    this._filterModel.setFilter(updateType, filterType);
+  }
+
+  _getFilter() {
+    const films = this._filmsModel.getFilms();
+
+    return [
+      {
+        type: FilterType.ALL,
+        name: 'All movies',
+        count: filtersFunction[FilterType.ALL](films).length,
+      },
+      {
+        type: FilterType.FAVORITES,
+        name: 'Favorites',
+        count: filtersFunction[FilterType.FAVORITES](films).length,
+      },
+      {
+        type: FilterType.WATCHLIST,
+        name: 'Watchlist',
+        count: filtersFunction[FilterType.WATCHLIST](films).length,
+      },
+      {
+        type: FilterType.HISTORY,
+        name: 'History',
+        count: filtersFunction[FilterType.HISTORY](films).length,
+      },
+    ];
+  }
+}
